@@ -25,14 +25,8 @@ function SongDetails() {
     return (
         <article>
       <h3>{true ? <span>⭐️</span> : null} {song.name}</h3>
-      <h5>
-        <span>
-          <p>{song.name}</p>
-        </span>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-      </h5>
-      <h6>{song.album}</h6>
-      <p>{song.time}</p>
+      <h4>Album: {song.album}</h4>
+      <p>Duration: {song.time}</p>
       <div className="showNavigation">
         <div>
           <Link to={`/songs`}>
@@ -40,7 +34,7 @@ function SongDetails() {
           </Link>
         </div>
         <div>
-          <Link to={`/songs/id/edit`}>
+          <Link to={`/songs/${id}/edit`}>
             <button>Edit</button>
           </Link>
         </div>

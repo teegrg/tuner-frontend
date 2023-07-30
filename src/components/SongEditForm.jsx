@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams  } from "react-router-dom";
 
 const API = process.env.REACT_APP_API_URL;
 
 function SongEditForm() {
-    const { id } =useParams();
+    const params = useParams();
+    const id = params.id
     let navigate = useNavigate();
 
     const [song, setSong] = useState({
@@ -15,15 +16,18 @@ function SongEditForm() {
         is_favorite: false,
     });
 
-    const updateSong = (updatedSong) => {
-        axios
-        .put(`${API}/songs/${id}`, updatedSong)
-        .then((res) => {
-            setSong(res.data)
-            navigate(`/songs/${id}`)
-        })
-        .catch((e) => console.warn("catch", e))
-    };
+
+    useEffect(() => {
+      axios
+      .get(`${API}/songs/${id}`)
+      .then((res) => setSong(res.data))
+      .catch((e) => {
+        navigate('/not-found')
+        console.warn("catch", e)
+      })
+  },[id,navigate])
+
+    
 
     const handleCheckboxChange = () => {
         setSong({...song, is_favorite: !song.is_favorite})
@@ -33,17 +37,21 @@ function SongEditForm() {
         setSong({...song, [event.target.id] : event.target.value})
     };
 
-    useEffect(() => {
-        axios
-        .get(`${API}/songs/${id}`)
-        .then((res) => setSong(res.data))
-        .catch((e) => navigate('/not-found'))
-    },[id,navigate])
 
     const handleSubmit = (event) => {
         event.preventDefault();
         updateSong(song);
     }
+
+    const updateSong = (updatedSong) => {
+      axios
+      .put(`${API}/songs/${id}`, updatedSong)
+      .then((res) => {
+          setSong(res.data)
+          navigate(`/songs/${id}`)
+      })
+      .catch((e) => console.warn("catch", e))
+  };
 
     return (
         <div className="New">
